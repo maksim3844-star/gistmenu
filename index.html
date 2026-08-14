@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Простое меню при гестационном диабете на неделю</title>
+<style>
+:root{
+  --ink:#243028; --muted:#5d6b62; --g:#2a6b4a; --g2:#3d8b62;
+  --bg:#f3f6f2; --card:#fff; --line:#d7e2d8; --soft:#e7f3ea;
+  --warn:#7a4f14; --warnbg:#fff7e8; --bad:#7d2d38;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#e8f1ea,#f7f4ec);
+  color:var(--ink);line-height:1.55;
+}
+header{
+  background:linear-gradient(135deg,#1e4d38,#2f7a54 60%,#c4a15a);
+  color:#fff;padding:32px 16px 24px;text-align:center;
+}
+header h1{font-size:clamp(1.4rem,4vw,2.15rem);margin-bottom:8px}
+header p{max-width:860px;margin:0 auto;opacity:.96}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 12px;font-size:.86rem}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px 48px}
+.alert,.notice{border-radius:16px;padding:14px 16px;margin:16px 0 8px;font-size:.94rem}
+.alert{background:#fdecee;border:1px solid #f0c4cb;color:#7a2430}
+.notice{background:var(--warnbg);border:1px solid #efd3a0;color:var(--warn)}
+.tabs{position:sticky;top:0;z-index:20;display:flex;gap:8px;overflow:auto;padding:12px 0;background:rgba(243,246,242,.94);backdrop-filter:blur(8px)}
+.tab{border:0;cursor:pointer;white-space:nowrap;background:#fff;color:#355043;border-radius:999px;padding:10px 14px;box-shadow:0 2px 8px rgba(36,48,40,.06)}
+.tab.active{background:var(--g);color:#fff}
+.panel{display:none;padding-top:8px}
+.panel.active{display:block}
+.day-head,.meal,.box{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 8px 22px rgba(36,48,40,.05);
+}
+.day-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 20px;margin-bottom:14px;align-items:center}
+.day-head h2{font-size:1.35rem}
+.kcal-big{font-size:1.5rem;font-weight:800;color:var(--g)}
+.meta{color:var(--muted);font-size:.92rem}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.stat{background:var(--soft);color:#215c40;border-radius:999px;padding:4px 10px;font-size:.82rem;font-weight:700}
+.grid{display:grid;gap:12px}
+.meal{padding:16px 18px;border-left:6px solid #cfe6d4}
+.meal.b{border-left-color:#d7a441}
+.meal.s{border-left-color:#6bb57c}
+.meal.l{border-left-color:#d07a73}
+.meal.d{border-left-color:#6aa4d4}
+.meal.e{border-left-color:#8f7cc2}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.label{font-size:.76rem;letter-spacing:.4px;text-transform:uppercase;color:#66786d;font-weight:800}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.kcal,.cho{border-radius:999px;padding:4px 10px;font-weight:700;font-size:.86rem}
+.kcal{background:var(--soft);color:var(--g)}
+.cho{background:#eef3ff;color:#2a4d8f}
+.meal h3{margin:7px 0 6px;font-size:1.08rem}
+.meal p{color:#3b4941;font-size:.95rem;margin-bottom:6px}
+.calc{display:inline-block;background:#f4faf6;color:#5d6e64;border-radius:8px;padding:4px 8px;font-size:.8rem}
+.why{margin-top:8px;font-size:.88rem;color:#215c40;background:#eff8f2;border-radius:10px;padding:8px 10px}
+.ing{background:#f7faf7;border-radius:10px;padding:8px 10px;margin:8px 0;font-size:.9rem}
+.total{margin-top:14px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,#dceee3,#f4ecd6);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.box{padding:20px;margin-top:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
+.cols h3,.box h2,.box h3{color:var(--g);margin-bottom:8px}
+.cols h3{border-bottom:1px solid var(--line);padding-bottom:4px}
+.cols ul,.box ul{padding-left:18px}
+.cols li,.box li{margin:4px 0;font-size:.94rem}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.badlist li{color:#6d2430}
+footer{text-align:center;color:#748178;padding:10px 16px 28px;font-size:.88rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Простое меню на неделю при гестационном диабете</h1>
+  <p>Обычные продукты: яйца, творог, кефир, курица, гречка, капуста, огурец, яблоко. Каждый день отдельно — с калориями, углеводами и полным описанием</p>
+  <div class="badges">
+    <span class="badge">Простые продукты</span>
+    <span class="badge">≈ 1950–2050 ккал</span>
+    <span class="badge">Углеводы ≈ 165–180 г</span>
+    <span class="badge">6 приёмов пищи</span>
+    <span class="badge">Без сахара, соков и белого хлеба</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="alert"><strong>Это не лечение и не индивидуальная диета.</strong> При гестационном диабете нормы углеводов, калорий и целевой сахар назначают эндокринолог и врач ЖК. Если уже есть схема ХЕ или инсулин — ориентируйтесь на врача.</div>
+  <div class="notice">В беременности нельзя кето и жёсткое ограничение углеводов. Обычно нужно около 175 г углеводов в сутки, если врач не дал другую цифру. Слишком мало углеводов повышает риск кетонов.</div>
+
+  <div class="tabs">
+    <button class="tab active" data-id="d1">Пн</button>
+    <button class="tab" data-id="d2">Вт</button>
+    <button class="tab" data-id="d3">Ср</button>
+    <button class="tab" data-id="d4">Чт</button>
+    <button class="tab" data-id="d5">Пт</button>
+    <button class="tab" data-id="d6">Сб</button>
+    <button class="tab" data-id="d7">Вс</button>
+    <button class="tab" data-id="shop">Покупки</button>
+    <button class="tab" data-id="rules">Правила</button>
+  </div>
+
+  <!-- ПН -->
+  <section class="panel active" id="d1">
+    <div class="day-head">
+      <div>
+        <h2>Понедельник</h2>
+        <div class="meta">Яйца, гречка, курица, капуста, кефир — всё из обычного магазина</div>
+        <div class="stats"><span class="stat">≈ 1980 ккал</span><span class="stat">Углеводы ≈ 171 г</span><span class="stat">Белок ≈ 114 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 1980 ккал</div><div class="meta">6 приёмов · без сахара</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:00</span><div class="pills"><span class="kcal">≈ 390 ккал</span><span class="cho">≈ 23 г углеводов</span></div></div>
+        <h3>Омлет с сыром и помидором + 1 кусок чёрного хлеба</h3>
+        <div class="ing"><strong>Продукты:</strong> яйца 2 шт., молоко 2,5% 20 мл, сыр твёрдый 15 г, помидор 80 г, масло растительное 5 г, хлеб ржаной/цельнозерновой 25 г, зелень по желанию.</div>
+        <p><strong>Как готовить:</strong> яйца взбить с молоком и щепоткой соли. На сковороде с маслом вылить смесь, сверху сыр и кружки помидора. Накрыть на 3–4 минуты. Хлеб подсушить. Сначала съесть омлет и помидор, хлеб — в середине или в конце.</p>
+        <p><strong>Чай:</strong> несладкий чай или вода. Без сахара, мёда и варенья.</p>
+        <div class="calc">Расчёт: яйца 156 + молоко 10 + сыр 55 + масло 45 + хлеб 55 + помидор 16</div>
+        <div class="why">Утром углеводов меньше, чем в обед: при ГСД утром сахар поднимается легче. Белок яиц сдерживает хлеб.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:00</span><div class="pills"><span class="kcal">≈ 220 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Творог и зелёное яблоко</h3>
+        <div class="ing"><strong>Продукты:</strong> творог 5% 150 г, яблоко зелёное 80 г, корица по вкусу.</div>
+        <p><strong>Как готовить:</strong> творог размять вилкой. Яблоко нарезать дольками вместе с кожурой и есть сразу с творогом, не отдельно.</p>
+        <div class="calc">Расчёт: творог 180 + яблоко 42</div>
+        <div class="why">Фрукт не натощак и не целый крупный. Без мёда и сахара.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:00</span><div class="pills"><span class="kcal">≈ 640 ккал</span><span class="cho">≈ 48 г углеводов</span></div></div>
+        <h3>Куриный суп без картофеля + гречка с курицей + салат из капусты</h3>
+        <div class="ing"><strong>Суп 300 мл:</strong> куриный бульон, курица 40 г, морковь 40 г, лук, кабачок или капуста 80 г, зелень. Без лапши и картофеля.<br>
+        <strong>Второе:</strong> гречка готовая 150 г, куриная грудка 120 г.<br>
+        <strong>Салат:</strong> капуста 120 г, огурец 80 г, масло растительное 8 г, соль, укроп.</div>
+        <p><strong>Как готовить:</strong> на бульоне сварить овощи до мягкости. Гречку промыть, варить на воде 1:2 до рассыпчатости. Грудь запечь или отварить целиком, нарезать. Капусту помять руками с солью, добавить огурец и масло.</p>
+        <p><strong>Хлеб к обеду не класть</strong> — углеводы уже в гречке.</p>
+        <div class="calc">Расчёт: суп 140 + гречка 165 + курица 198 + салат 95</div>
+        <div class="why">Главная порция крупы — днём. В один приём одна крупа, без хлеба сверху.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 16:30</span><div class="pills"><span class="kcal">≈ 200 ккал</span><span class="cho">≈ 14 г углеводов</span></div></div>
+        <h3>Кефир и горсть орехов</h3>
+        <div class="ing"><strong>Продукты:</strong> кефир 1% 200 мл, грецкие орехи 12 г (3–4 половинки).</div>
+        <p>Если после фруктов сахар высокий — этот полдник лучше яблока. Кефир без сладких наполнителей.</p>
+        <div class="calc">Расчёт: кефир 80 + орехи 80</div>
+        <div class="why">Белок и жир без быстрых углеводов. Не заменять сладким йогуртом.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:00</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 38 г углеводов</span></div></div>
+        <h3>Отварной минтай, тушёная капуста и гречка</h3>
+        <div class="ing"><strong>Продукты:</strong> минтай 160 г, капуста 220 г, морковь 30 г, лук, томатная паста без сахара 10 г, масло 5 г, гречка готовая 90 г, лимон.</div>
+        <p><strong>Как готовить:</strong> рыбу отварить или запечь 15–18 минут с солью и лимоном. Капусту тушить с морковью и луком 20–25 минут, пасту добавить в конце. Гречки вечером меньше, чем в обед.</p>
+        <div class="calc">Расчёт: рыба 140 + капуста 110 + гречка 99 + масло 45</div>
+        <div class="why">Вечером крупы меньше. Рыба — простой белок без жарки в кляре.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:30</span><div class="pills"><span class="kcal">≈ 160 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Кефир + 1 кусок чёрного хлеба + сыр</h3>
+        <div class="ing"><strong>Продукты:</strong> кефир 1% 200 мл, хлеб ржаной 20 г, сыр 10 г.</div>
+        <p>Без печенья, варенья и яблока на ночь. Не пропускайте этот приём: длинный голод часто поднимает утренний сахар и даёт кетоны.</p>
+        <div class="calc">Расчёт: кефир 80 + хлеб 45 + сыр 35</div>
+        <div class="why">Маленький углевод + белок на ночь — обычная схема при ГСД.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за понедельник</span><strong>≈ 1980 ккал · 171 г углеводов</strong></div>
+  </section>
+
+  <!-- ВТ -->
+  <section class="panel" id="d2">
+    <div class="day-head">
+      <div>
+        <h2>Вторник</h2>
+        <div class="meta">Гречка утром отмеряется ложкой/весами. Обед — суп и второе без белого риса</div>
+        <div class="stats"><span class="stat">≈ 2010 ккал</span><span class="stat">Углеводы ≈ 174 г</span><span class="stat">Белок ≈ 116 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 2010 ккал</div><div class="meta">простые крупы: гречка и перловка</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:00</span><div class="pills"><span class="kcal">≈ 400 ккал</span><span class="cho">≈ 26 г углеводов</span></div></div>
+        <h3>Гречневая каша на воде + яйцо + огурец</h3>
+        <div class="ing"><strong>Продукты:</strong> гречка 40 г сухой (около 110 г готовой), яйцо 1 шт., огурец 120 г, масло растительное 5 г, зелень.</div>
+        <p><strong>Как готовить:</strong> гречку промыть, варить на воде до рассыпчатости, не разваривать. Яйцо сварить вкрутую 10 минут. Масло в готовую кашу. Сначала огурец и яйцо, каша после.</p>
+        <div class="calc">Расчёт: гречка 140 + яйцо 78 + огурец 18 + масло 45</div>
+        <div class="why">40 г сухой крупы — не полная глубокая тарелка. При ГСД кашу лучше взвешивать.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:00</span><div class="pills"><span class="kcal">≈ 230 ккал</span><span class="cho">≈ 13 г углеводов</span></div></div>
+        <h3>Сыр, помидор и хлебцы</h3>
+        <div class="ing"><strong>Продукты:</strong> сыр твёрдый 30 г, помидор 120 г, хлебцы ржаные без сахара 18 г (обычно 2 шт.).</div>
+        <p>Солёный перекус. Если хлебцев нет — 20 г чёрного хлеба.</p>
+        <div class="calc">Расчёт: сыр 110 + помидор 22 + хлебцы 65</div>
+        <div class="why">Часто держит сахар лучше, чем фрукт между едой.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:00</span><div class="pills"><span class="kcal">≈ 650 ккал</span><span class="cho">≈ 49 г углеводов</span></div></div>
+        <h3>Щи без картофеля + перловка с говядиной + салат</h3>
+        <div class="ing"><strong>Щи 300 мл:</strong> капуста, морковь, лук, курица или говядина 40 г, сметана 10 г. Без сахара в кастрюлю.<br>
+        <strong>Второе:</strong> перловка готовая 140 г, говядина тушёная 100 г.<br>
+        <strong>Салат:</strong> огурец 100 г, зелень, масло 7 г.</div>
+        <p><strong>Как готовить:</strong> перловку замочить на 2–3 часа или с вечера, варить до мягкости. Говядину тушить с луком и морковью 40–50 минут. В щи картофель не класть или совсем маленький кусок, если без него суп не едите — тогда перловки сделать 110 г.</p>
+        <div class="calc">Расчёт: щи 150 + перловка 160 + говядина 210 + салат 80 + сметана 20</div>
+        <div class="why">Перловка дешёвая, сытная и медленнее белого риса. Не кладите к ней ещё хлеб.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 16:30</span><div class="pills"><span class="kcal">≈ 210 ккал</span><span class="cho">≈ 18 г углеводов</span></div></div>
+        <h3>Груша небольшая и грецкий орех</h3>
+        <div class="ing"><strong>Продукты:</strong> груша 120 г, грецкий орех 15 г.</div>
+        <p>Есть вместе. Сок, компот и сухофрукты нельзя.</p>
+        <div class="calc">Расчёт: груша 56 + орех 100</div>
+        <div class="why">Орех обязателен: без него фрукт поднимает сахар быстрее.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:00</span><div class="pills"><span class="kcal">≈ 410 ккал</span><span class="cho">≈ 36 г углеводов</span></div></div>
+        <h3>Хек, тушёные кабачки и гречка</h3>
+        <div class="ing"><strong>Продукты:</strong> хек 160 г, кабачок 220 г, лук, масло 5 г, гречка готовая 90 г, зелень, лимон.</div>
+        <p>Рыбу запечь 15 минут. Кабачок потушить без муки и сметанного соуса с сахаром. Гречки немного.</p>
+        <div class="calc">Расчёт: хек 140 + кабачки 55 + гречка 99 + масло 45</div>
+        <div class="why">Простой ужин: рыба, овощ, маленькая крупа.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:30</span><div class="pills"><span class="kcal">≈ 150 ккал</span><span class="cho">≈ 15 г углеводов</span></div></div>
+        <h3>Ряженка без добавок</h3>
+        <div class="ing"><strong>Продукты:</strong> ряженка 2,5% 200 мл. Если врач просил углевод на ночь — добавьте 15 г чёрного хлеба.</div>
+        <div class="calc">Расчёт: ряженка 110–150</div>
+        <div class="why">Не сладкий творожок и не йогурт «персик».</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за вторник</span><strong>≈ 2010 ккал · 174 г углеводов</strong></div>
+  </section>
+
+  <!-- СР -->
+  <section class="panel" id="d3">
+    <div class="day-head">
+      <div>
+        <h2>Среда</h2>
+        <div class="meta">Чечевица из пакета, говядина, капуста. Без манки и батона</div>
+        <div class="stats"><span class="stat">≈ 1970 ккал</span><span class="stat">Углеводы ≈ 169 г</span><span class="stat">Белок ≈ 115 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 1970 ккал</div><div class="meta">бобовые вместо второй крупы</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:00</span><div class="pills"><span class="kcal">≈ 380 ккал</span><span class="cho">≈ 22 г углеводов</span></div></div>
+        <h3>Творог с яйцом и 1 кусок чёрного хлеба</h3>
+        <div class="ing"><strong>Продукты:</strong> творог 5% 180 г, яйцо 1 шт., хлеб ржаной 25 г, огурец 80 г, зелень.</div>
+        <p>Яйцо сварить. Творог посолить или посыпать корицей — без сахара. Хлеб к творогу, не отдельно с чаем.</p>
+        <div class="calc">Расчёт: творог 216 + яйцо 78 + хлеб 55 + огурец 12</div>
+        <div class="why">Проще запеканки и обычно ровнее по сахару. Если очень хочется запеканку — без сахара и с 1 ст. л. манки на всю порцию.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:00</span><div class="pills"><span class="kcal">≈ 190 ккал</span><span class="cho">≈ 14 г углеводов</span></div></div>
+        <h3>Огурец, морковь и кусочек сыра</h3>
+        <div class="ing"><strong>Продукты:</strong> огурец 150 г, морковь 80 г, сыр 25 г.</div>
+        <p>Морковь тереть или нарезать соломкой. Это вместо печенья.</p>
+        <div class="calc">Расчёт: овощи 50 + сыр 90</div>
+        <div class="why">Морковь есть, но вместе с сыром и не стакан сока.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:00</span><div class="pills"><span class="kcal">≈ 650 ккал</span><span class="cho">≈ 48 г углеводов</span></div></div>
+        <h3>Суп из чечевицы + говядина с овощами + салат</h3>
+        <div class="ing"><strong>Суп 300 г:</strong> чечевица красная или зелёная 30 г сухой на порцию, морковь, лук, томатная паста без сахара.<br>
+        <strong>Второе:</strong> говядина 110 г, кабачок 150 г, масло 5 г.<br>
+        <strong>Салат:</strong> капуста 120 г, масло 7 г.</div>
+        <p><strong>Как готовить:</strong> чечевицу промыть, варить 20–30 минут до мягкости. Не класть к супу гречку и хлеб: чечевица уже углевод. Мясо тушить отдельно с кабачком.</p>
+        <div class="calc">Расчёт: суп 230 + говядина с овощами 300 + салат 90</div>
+        <div class="why">Чечевица дешёвая и сытная. В один обед не мешайте её с макаронами.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 16:30</span><div class="pills"><span class="kcal">≈ 220 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Натуральный йогурт и ягоды / зелёное яблоко</h3>
+        <div class="ing"><strong>Продукты:</strong> йогурт без сахара 180 г (или простокваша), ягоды 70 г или яблоко 80 г.</div>
+        <p>На этикетке не должно быть сахара. «Йогурт клубничный 1,5%» обычно не подходит.</p>
+        <div class="calc">Расчёт: йогурт 110 + ягоды/яблоко 30–40</div>
+        <div class="why">Белок сначала, ягода сверху. Не питьевой сладкий йогурт.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:00</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 37 г углеводов</span></div></div>
+        <h3>Котлеты из курицы, капуста и гречка</h3>
+        <div class="ing"><strong>Продукты:</strong> фарш куриный 150 г, яйцо 20 г, лук, соль. Капуста тушёная 200 г. Гречка готовая 90 г. Масло 5 г.</div>
+        <p><strong>Котлеты:</strong> фарш + яйцо + лук, без батона и картофеля. Готовить на пару или в духовке 20 минут, не жарить в сухарях.</p>
+        <div class="calc">Расчёт: котлеты 240 + капуста 80 + гречка 99 + масло 45</div>
+        <div class="why">Хлеб в фарше — скрытый быстрый углевод. При ГСД его лучше не класть.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:30</span><div class="pills"><span class="kcal">≈ 160 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Кефир и чёрный хлеб</h3>
+        <div class="ing">Кефир 1% 200 мл, хлеб ржаной 20 г.</div>
+        <div class="calc">Расчёт: кефир 80 + хлеб 45</div>
+        <div class="why">Одинаковый ночной перекус помогает понять, что влияет на утренний сахар.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за среду</span><strong>≈ 1970 ккал · 169 г углеводов</strong></div>
+  </section>
+
+  <!-- ЧТ -->
+  <section class="panel" id="d4">
+    <div class="day-head">
+      <div>
+        <h2>Четверг</h2>
+        <div class="meta">Овсянка маленькой порцией, рыба, маленький картофель в мундире</div>
+        <div class="stats"><span class="stat">≈ 2030 ккал</span><span class="stat">Углеводы ≈ 176 г</span><span class="stat">Белок ≈ 114 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 2030 ккал</div><div class="meta">картофель только 80 г и не пюре</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:00</span><div class="pills"><span class="kcal">≈ 400 ккал</span><span class="cho">≈ 25 г углеводов</span></div></div>
+        <h3>Овсянка на воде + творог</h3>
+        <div class="ing"><strong>Продукты:</strong> овсяные хлопья обычные 30 г (не быстрого приготовления), вода 180 мл, творог 5% 100 г, корица, ягоды 30 г или ничего.</div>
+        <p><strong>Как готовить:</strong> хлопья варить 8–10 минут. Не класть банан, мёд, сахар, сгущёнку. Сначала 2–3 ложки творога, потом кашу.</p>
+        <div class="calc">Расчёт: овсянка 111 + творог 120 + ягоды 12 + корица 0 ≈ 400 с чаем без сахара и 5 г масла в кашу по желанию</div>
+        <div class="why">30 г сухих хлопьев — это небольшая пиала. «Тарелка овсянки как обычно» при ГСД часто даёт высокий сахар.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:00</span><div class="pills"><span class="kcal">≈ 210 ккал</span><span class="cho">≈ 12 г углеводов</span></div></div>
+        <h3>Яйцо, огурец и семечки</h3>
+        <div class="ing">Яйцо 1 шт., огурец 150 г, семечки подсолнечника очищенные 12 г (не щёлкать стакан).</div>
+        <div class="calc">Расчёт: яйцо 78 + огурец 23 + семечки 70</div>
+        <div class="why">Простой белковый перекус, если между завтраком и обедом сахар ещё высокий.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:00</span><div class="pills"><span class="kcal">≈ 660 ккал</span><span class="cho">≈ 47 г углеводов</span></div></div>
+        <h3>Овощной суп + запечённая рыба + гречка + салат</h3>
+        <div class="ing"><strong>Суп 300 мл:</strong> капуста, морковь, лук, кабачок, зелень. Без картофеля и вермишели.<br>
+        <strong>Рыба:</strong> минтай, хек или треска 150 г.<br>
+        <strong>Гречка:</strong> 140 г готовой.<br>
+        <strong>Салат:</strong> огурец, зелень, масло 7 г.</div>
+        <p>Рыбу запечь с луком и лимоном, не в кляре и не копчёную. Если берёте скумбрию или горбушу — тоже запекать, не коптить.</p>
+        <div class="calc">Расчёт: суп 80 + рыба 140 + гречка 154 + салат 85 + масло к рыбе 40</div>
+        <div class="why">Белая рыба из заморозки — простой и недорогой белок. Копчёную при беременности не брать.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 16:30</span><div class="pills"><span class="kcal">≈ 230 ккал</span><span class="cho">≈ 17 г углеводов</span></div></div>
+        <h3>Творог и малина / киви / яблоко</h3>
+        <div class="ing">Творог 5% 150 г, ягоды 70 г или киви 80 г или яблоко 80 г.</div>
+        <div class="calc">Расчёт: творог 180 + фрукт/ягода 28–40</div>
+        <div class="why">Не виноград, не банан, не хурма, не сухофрукты.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:00</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 39 г углеводов</span></div></div>
+        <h3>Курица, тушёная капуста и картофель в мундире</h3>
+        <div class="ing">Куриная грудка или бедро без кожи 140 г, капуста 220 г, картофель 80 г, масло 5 г, томатная паста без сахара.</div>
+        <p>Картофель маленький, варить в кожуре, есть вместе с курицей и капустой. Не делать пюре и не жарить.</p>
+        <div class="calc">Расчёт: курица 210 + капуста 90 + картофель 70 + масло 45</div>
+        <div class="why">Картофель не запрещён полностью, но порция маленькая и не каждый день.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:30</span><div class="pills"><span class="kcal">≈ 150 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Тёплое молоко или кефир + сыр</h3>
+        <div class="ing">Молоко 2,5% 180 мл или кефир 200 мл, сыр 15 г. Без печенья.</div>
+        <p>Если молоко поднимает сахар — пейте кефир. Это частая личная реакция.</p>
+        <div class="calc">Расчёт: молоко/кефир 90 + сыр 55</div>
+        <div class="why">Проверьте глюкометром, что вам подходит на ночь.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за четверг</span><strong>≈ 2030 ккал · 176 г углеводов</strong></div>
+  </section>
+
+  <!-- ПТ -->
+  <section class="panel" id="d5">
+    <div class="day-head">
+      <div>
+        <h2>Пятница</h2>
+        <div class="meta">Лёгкий день: омлет, суп, рыба, солёный полдник</div>
+        <div class="stats"><span class="stat">≈ 1950 ккал</span><span class="stat">Углеводы ≈ 167 г</span><span class="stat">Белок ≈ 113 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 1950 ккал</div><div class="meta">если фрукты повышают сахар — ешьте огурец и кефир</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:00</span><div class="pills"><span class="kcal">≈ 400 ккал</span><span class="cho">≈ 24 г углеводов</span></div></div>
+        <h3>Яичница с кабачком + чёрный хлеб</h3>
+        <div class="ing">Яйца 2 шт., кабачок 100 г, помидор 50 г, масло 5 г, хлеб ржаной 25 г, зелень.</div>
+        <p>Кабачок сначала потушить 3 минуты, сверху яйца. Хлеб один тонкий кусок. Без колбасы и сосисок.</p>
+        <div class="calc">Расчёт: яйца 156 + овощи 30 + масло 45 + хлеб 55</div>
+        <div class="why">Овощи на завтрак делают яйца сытнее и мягче по сахару.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:00</span><div class="pills"><span class="kcal">≈ 200 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Творог и киви или зелёное яблоко</h3>
+        <div class="ing">Творог 5% 100 г, киви 80 г или яблоко 80 г.</div>
+        <div class="calc">Расчёт: творог 120 + фрукт 40</div>
+        <div class="why">Киви и кислое яблоко обычно лучше банана.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:00</span><div class="pills"><span class="kcal">≈ 630 ккал</span><span class="cho">≈ 46 г углеводов</span></div></div>
+        <h3>Грибной или овощной суп + курица с гречкой + салат</h3>
+        <div class="ing"><strong>Суп 300 г:</strong> шампиньоны 80 г или просто овощи, лук, морковь, без жареных белых гренков.<br>
+        <strong>Второе:</strong> курица 120 г, гречка 140 г готовой, огурец/капуста 150 г, масло 7 г.</div>
+        <p>Суп не делать картофельным пюре. Грибы хорошо проваривать.</p>
+        <div class="calc">Расчёт: суп 120 + курица 198 + гречка 154 + салат 90</div>
+        <div class="why">Картофельный суп-пюре поднимает сахар быстрее, чем суп с кусочками овощей.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 16:30</span><div class="pills"><span class="kcal">≈ 200 ккал</span><span class="cho">≈ 10 г углеводов</span></div></div>
+        <h3>Кефир с огурцом и укропом</h3>
+        <div class="ing">Кефир или несладкий йогурт 200 г, огурец 100 г, укроп, щепотка соли. Как простой холодный суп без картофеля и кваса.</div>
+        <div class="calc">Расчёт: кефир 80–120 + огурец 16</div>
+        <div class="why">Солёный полдник — запасной вариант, если после яблока сахар не в цели.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:00</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 38 г углеводов</span></div></div>
+        <h3>Треска или минтай, стручковая фасоль или капуста и чечевица</h3>
+        <div class="ing">Рыба 170 г, капуста или замороженная стручковая фасоль 180 г, чечевица готовая 100 г, масло 5 г, лимон.</div>
+        <p>Фасоль из заморозки — простой продукт. Чечевицу можно сварить с утра на 2 дня.</p>
+        <div class="calc">Расчёт: рыба 145 + овощи 55 + чечевица 116 + масло 45</div>
+        <div class="why">Вечером не добавляйте хлеб «за компанию».</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:30</span><div class="pills"><span class="kcal">≈ 160 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Кефир и хлеб</h3>
+        <div class="ing">Кефир 1% 200 мл, хлеб ржаной 20 г.</div>
+        <div class="calc">Расчёт: кефир 80 + хлеб 45</div>
+        <div class="why">Одинаковый поздний перекус удобно сверять с утренним сахаром.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за пятницу</span><strong>≈ 1950 ккал · 167 г углеводов</strong></div>
+  </section>
+
+  <!-- СБ -->
+  <section class="panel" id="d6">
+    <div class="day-head">
+      <div>
+        <h2>Суббота</h2>
+        <div class="meta">Выходной без блинов, оладий, компота и магазинного торта</div>
+        <div class="stats"><span class="stat">≈ 2040 ккал</span><span class="stat">Углеводы ≈ 178 г</span><span class="stat">Белок ≈ 116 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 2040 ккал</div><div class="meta">сырники только домашние и без сахара</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 8:30</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 26 г углеводов</span></div></div>
+        <h3>Сырники без сахара со сметаной</h3>
+        <div class="ing">Творог 5% 180 г, яйцо 1 шт., мука 12 г (1 неполная ст. л.), корица. Сметана 15% 15 г, ягоды 40 г или ничего. Не варенье.</div>
+        <p><strong>Как готовить:</strong> массу слепить, запечь в духовке 20–25 минут или жарить на сухой антипригарной сковороде. Магазинные сырники и сгущёнка не подходят.</p>
+        <div class="calc">Расчёт: сырники 330 + сметана 23 + ягоды 16</div>
+        <div class="why">Если после сырников сахар высокий — в воскресенье ешьте омлет, не повторяйте.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:30</span><div class="pills"><span class="kcal">≈ 190 ккал</span><span class="cho">≈ 12 г углеводов</span></div></div>
+        <h3>Овощи и яйцо</h3>
+        <div class="ing">Огурец, морковь, перец 200 г, яйцо 1 шт.</div>
+        <div class="calc">Расчёт: овощи 45 + яйцо 78</div>
+        <div class="why">Вместо печенья к чаю.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:30</span><div class="pills"><span class="kcal">≈ 660 ккал</span><span class="cho">≈ 50 г углеводов</span></div></div>
+        <h3>Борщ без сахара + мясо + гречка + салат</h3>
+        <div class="ing"><strong>Борщ 300 мл:</strong> капуста, свёкла, морковь, лук, мясо 40 г, сметана 10 г. Сахар в кастрюлю не класть. Картофеля нет или 1 маленький кусок — тогда гречки 120 г, не 150.<br>
+        <strong>Второе:</strong> говядина или курица 90 г, гречка 150 г готовой.<br>
+        <strong>Салат:</strong> капуста и огурец, масло 7 г.</div>
+        <div class="calc">Расчёт: борщ 150 + мясо 190 + гречка 165 + салат 90 + сметана 20</div>
+        <div class="why">Свёкла уже даёт углеводы. Хлеб к борщу не нужен.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 17:00</span><div class="pills"><span class="kcal">≈ 230 ккал</span><span class="cho">≈ 18 г углеводов</span></div></div>
+        <h3>Творог и киви</h3>
+        <div class="ing">Творог 120 г, киви 90 г или яблоко 100 г.</div>
+        <div class="calc">Расчёт: творог 144 + киви 45</div>
+        <div class="why">Один фрукт за раз, не ваза с фруктами.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:30</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 36 г углеводов</span></div></div>
+        <h3>Запечённая курица, кабачки и гречка</h3>
+        <div class="ing">Куриное филе 140 г, кабачки 200 г, гречка готовая 90 г, масло 5 г, чеснок, зелень.</div>
+        <p>Тарелка: половина овощи, четверть мясо, четверть крупа.</p>
+        <div class="calc">Расчёт: курица 230 + кабачки 50 + гречка 99 + масло 45</div>
+        <div class="why">Простой воскресный ужин без макарон и жареной картошки.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:45</span><div class="pills"><span class="kcal">≈ 150 ккал</span><span class="cho">≈ 15 г углеводов</span></div></div>
+        <h3>Ряженка или кефир</h3>
+        <div class="ing">200 мл. При необходимости 15–20 г чёрного хлеба.</div>
+        <div class="calc">Расчёт: 110–160</div>
+        <div class="why">Не глазированный сырок.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за субботу</span><strong>≈ 2040 ккал · 178 г углеводов</strong></div>
+  </section>
+
+  <!-- ВС -->
+  <section class="panel" id="d7">
+    <div class="day-head">
+      <div>
+        <h2>Воскресенье</h2>
+        <div class="meta">Спокойный день из тех же продуктов. Удобно смотреть сахар</div>
+        <div class="stats"><span class="stat">≈ 1990 ккал</span><span class="stat">Углеводы ≈ 172 г</span><span class="stat">Белок ≈ 113 г</span></div>
+      </div>
+      <div><div class="kcal-big">≈ 1990 ккал</div><div class="meta">без воскресных блинов и сладкого чая</div></div>
+    </div>
+    <div class="grid">
+      <article class="meal b">
+        <div class="top"><span class="label">Завтрак · 9:00</span><div class="pills"><span class="kcal">≈ 400 ккал</span><span class="cho">≈ 23 г углеводов</span></div></div>
+        <h3>Омлет с капустой или шпинатом + хлеб</h3>
+        <div class="ing">Яйца 2 шт., капуста мелко 60 г или зелень, помидор 60 г, масло 5 г, хлеб ржаной 25 г, сыр 10 г по желанию.</div>
+        <div class="calc">Расчёт: яйца 156 + овощи 25 + масло 45 + хлеб 55 + сыр 35</div>
+        <div class="why">Самый предсказуемый завтрак, если каши и сырники поднимают сахар.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Второй завтрак · 11:30</span><div class="pills"><span class="kcal">≈ 220 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Творог и зелёное яблоко</h3>
+        <div class="ing">Творог 5% 130 г, яблоко 100 г.</div>
+        <div class="calc">Расчёт: творог 156 + яблоко 52</div>
+        <div class="why">Кожуру с яблока не снимать.</div>
+      </article>
+      <article class="meal l">
+        <div class="top"><span class="label">Обед · 14:30</span><div class="pills"><span class="kcal">≈ 640 ккал</span><span class="cho">≈ 48 г углеводов</span></div></div>
+        <h3>Суп с курицей и овощами + чечевица с мясом + салат</h3>
+        <div class="ing"><strong>Суп 300 мл:</strong> курица 40 г, морковь, лук, кабачок или капуста.<br>
+        <strong>Второе:</strong> чечевица готовая 130 г, курица 80 г.<br>
+        <strong>Салат:</strong> огурец и зелень, масло 7 г. Гречку в этот обед не класть.</div>
+        <div class="calc">Расчёт: суп 140 + чечевица с курицей 360 + салат 90</div>
+        <div class="why">Один источник крахмала. Чечевица заменяет гречку и хлеб.</div>
+      </article>
+      <article class="meal s">
+        <div class="top"><span class="label">Полдник · 17:00</span><div class="pills"><span class="kcal">≈ 200 ккал</span><span class="cho">≈ 12 г углеводов</span></div></div>
+        <h3>Орехи и огурец</h3>
+        <div class="ing">Грецкие орехи или семечки 18 г, огурец 150 г. Если нужен углевод по схеме врача — 1 кусок хлеба 20 г.</div>
+        <div class="calc">Расчёт: орехи 120 + огурец 23</div>
+        <div class="why">Вариант на день, когда фрукты не подходят по сахару.</div>
+      </article>
+      <article class="meal d">
+        <div class="top"><span class="label">Ужин · 19:30</span><div class="pills"><span class="kcal">≈ 420 ккал</span><span class="cho">≈ 37 г углеводов</span></div></div>
+        <h3>Тушёная капуста с курицей и гречка</h3>
+        <div class="ing">Капуста 220 г, курица или индейка 120 г, морковь 30 г, томатная паста без сахара 10 г, масло 5 г, гречка готовая 90 г.</div>
+        <div class="calc">Расчёт: тушение 275 + гречка 99 + масло 45</div>
+        <div class="why">Много объёма при умеренной крупе. Еда на сковороде из 4 продуктов.</div>
+      </article>
+      <article class="meal e">
+        <div class="top"><span class="label">Перед сном · 21:45</span><div class="pills"><span class="kcal">≈ 160 ккал</span><span class="cho">≈ 16 г углеводов</span></div></div>
+        <h3>Кефир + хлеб + сыр</h3>
+        <div class="ing">Кефир 200 мл, хлеб ржаной 20 г, сыр 10 г.</div>
+        <div class="calc">Расчёт: кефир 80 + хлеб 45 + сыр 35</div>
+        <div class="why">Белок и немного сложных углеводов на ночь.</div>
+      </article>
+    </div>
+    <div class="total"><span>Итого за воскресенье</span><strong>≈ 1990 ккал · 172 г углеводов</strong></div>
+  </section>
+
+  <!-- ПОКУПКИ -->
+  <section class="panel" id="shop">
+    <div class="box" style="margin-top:0">
+      <h2>Список простых продуктов на неделю</h2>
+      <p class="meta">Всё можно купить в обычном магазине. На пачках смотрите: сахар, глюкоза, декстроза, сироп, мальтодекстрин.</p>
+      <div class="cols">
+        <div>
+          <h3>Овощи</h3>
+          <ul>
+            <li>Капуста белокочанная — 2,5 кг</li>
+            <li>Огурцы — 1,8 кг</li>
+            <li>Помидоры — 700 г</li>
+            <li>Кабачки — 1,3 кг</li>
+            <li>Морковь — 800 г</li>
+            <li>Лук репчатый — 6 шт.</li>
+            <li>Картофель — 200 г</li>
+            <li>Свёкла — 1 шт. на борщ</li>
+            <li>Перец — 2 шт. по желанию</li>
+            <li>Шампиньоны — 200 г</li>
+            <li>Фасоль стручковая зам. — 200 г</li>
+            <li>Зелень, чеснок, лимон</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Фрукты</h3>
+          <ul>
+            <li>Яблоки зелёные — 6 шт.</li>
+            <li>Груши небольшие — 2 шт.</li>
+            <li>Киви — 3 шт.</li>
+            <li>Ягоды зам. — 300 г</li>
+            <li>Не брать: бананы, виноград, хурму, дыню, соки, курагу, изюм</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Молочка и яйца</h3>
+          <ul>
+            <li>Творог 5% — 1,6 кг</li>
+            <li>Кефир 1% — 1,5 л</li>
+            <li>Ряженка без сахара — 600 мл</li>
+            <li>Йогурт натуральный / простокваша — 500 г</li>
+            <li>Молоко 2,5% — 0,5 л</li>
+            <li>Сметана 15% — 80 г</li>
+            <li>Сыр твёрдый — 200 г</li>
+            <li>Яйца — 16 шт.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Мясо и рыба</h3>
+          <ul>
+            <li>Куриная грудка / бедро без кожи — 1,2 кг</li>
+            <li>Говядина — 400 г</li>
+            <li>Фарш куриный — 200 г</li>
+            <li>Курица на суп — 400 г</li>
+            <li>Минтай / хек / треска — 700 г</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Крупы и хлеб</h3>
+          <ul>
+            <li>Гречка — 500 г</li>
+            <li>Овсяные хлопья обычные — 150 г</li>
+            <li>Перловка — 200 г</li>
+            <li>Чечевица — 300 г</li>
+            <li>Хлеб ржаной / цельнозерновой — 350 г</li>
+            <li>Хлебцы ржаные без сахара — 1 пачка</li>
+            <li>Мука — 50 г</li>
+            <li>Томатная паста без сахара</li>
+            <li>Масло растительное</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ещё</h3>
+          <ul>
+            <li>Грецкие орехи — 80 г</li>
+            <li>Семечки очищенные — 40 г</li>
+            <li>Корица, лавровый лист, перец, соль</li>
+            <li>Кухонные весы</li>
+            <li>Глюкометр по назначению врача</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРАВИЛА -->
+  <section class="panel" id="rules">
+    <div class="box" style="margin-top:0">
+      <h2>Как есть при ГСД из простых продуктов</h2>
+      <ul>
+        <li>Еда каждые 2,5–3,5 часа. Не пропускайте ужин и кефир на ночь.</li>
+        <li>Порядок в тарелке: <strong>овощи → белок → крупа или хлеб</strong>.</li>
+        <li>В один приём один углевод: либо гречка, либо хлеб, либо чечевица, либо фрукт.</li>
+        <li>Крупу и хлеб взвешивайте. Столовая ложка сухой гречки ≈ 20 г, но весы надёжнее.</li>
+        <li>Завтрак легче по углеводам, обед сытнее, вечером крупы меньше.</li>
+        <li>После еды 10–15 минут спокойной ходьбы, если врач не запретил.</li>
+        <li>Вода 1,5–2 л, если нет другого назначения. Чай без сахара. Кофеина обычно не больше 200 мг в день.</li>
+        <li>Не голодайте «чтобы сахар был лучше». При беременности это опасно.</li>
+      </ul>
+    </div>
+    <div class="two">
+      <div class="box">
+        <h3>Частые цели по сахару</h3>
+        <p class="meta">Точные цифры пишет ваш врач. Ниже — часто используемые ориентиры.</p>
+        <ul>
+          <li>Натощак: часто &lt; 5,1 ммоль/л</li>
+          <li>Через 1 час от начала еды: часто &lt; 7,0</li>
+          <li>Через 2 часа: часто &lt; 6,7</li>
+          <li>Записывайте блюдо, граммы крупы и цифру</li>
+          <li>Если 2–3 дня не в цели — не режьте еду сами, звоните врачу. Инсулин при ГСД — не провал</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Убрать полностью</h3>
+        <ul class="badlist">
+          <li>Сахар, мёд, варенье, конфеты</li>
+          <li>Соки, компот, квас, газировка</li>
+          <li>Белый хлеб, булки, печенье, торты</li>
+          <li>Белый рис, манка, быстрые каши</li>
+          <li>Сладкие йогурты и сырки</li>
+          <li>Банан, виноград, хурма, сухофрукты</li>
+          <li>Колбаса, сосиски, копчёная рыба</li>
+          <li>Алкоголь, суши, сырое молоко</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box">
+      <h3>Простые замены, если сахар высокий</h3>
+      <ul>
+        <li>После каши высокий — на следующий день омлет и хлеб 25 г.</li>
+        <li>После яблока высокий — полдник из кефира, огурца и ореха.</li>
+        <li>После молока на ночь высокий — только кефир.</li>
+        <li>После сырников высокий — больше их не повторять.</li>
+        <li>Обед высокий — убавьте гречку на 20–30 г, не убирайте мясо и овощи.</li>
+      </ul>
+      <p class="meta" style="margin-top:10px">Калории и углеводы округлены. Перед применением согласуйте рацион с эндокринологом. При тошноте, кетонах, очень высоком сахаре, рвоте — связь с врачом, а не новое ужесточение диеты.</p>
+    </div>
+  </section>
+</div>
+<footer>Ориентировочное меню из простых продуктов при гестационном диабете. Не заменяет консультацию врача.</footer>
+<script>
+document.querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    btn.classList.add('active');
+    document.getElementById(btn.getAttribute('data-id')).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
